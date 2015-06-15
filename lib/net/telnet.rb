@@ -277,6 +277,8 @@ module Net
       @options["Prompt"]     = /[$%#>] \z/n  unless @options.has_key?("Prompt")
       @options["Timeout"]    = 10            unless @options.has_key?("Timeout")
       @options["Waittime"]   = 0             unless @options.has_key?("Waittime")
+      @options["BindHost"]   = nil           unless @options.has_key?("BindHost")
+      @options["BindPort"]   = nil           unless @options.has_key?("BindPort")
       unless @options.has_key?("Binmode")
         @options["Binmode"]    = false
       else
@@ -344,10 +346,10 @@ module Net
 
         begin
           if @options["Timeout"] == false
-            @sock = TCPSocket.open(@options["Host"], @options["Port"])
+            @sock = TCPSocket.open(@options["Host"], @options["Port"], @options["BindHost"], @options["BindPort"])
           else
             Timeout.timeout(@options["Timeout"], Net::OpenTimeout) do
-              @sock = TCPSocket.open(@options["Host"], @options["Port"])
+              @sock = TCPSocket.open(@options["Host"], @options["Port"], @options["BindHost"], @options["BindPort"])
             end
           end
         rescue Net::OpenTimeout
